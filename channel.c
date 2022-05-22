@@ -16,57 +16,57 @@ struct Channel {
     uint8_t buf[];    // memory holding elements
 };
 
-inline static size_t channel_index(Channel const* const c, size_t pos) {
-    pos %= c->n_elem;
+inline static size_t channel_index(Channel const* const channel, size_t pos) {
+    pos %= channel->n_elem;
 
-    size_t index = c->start + pos;
-    index %= c->n_elem;
+    size_t channel_index = channel->start + pos;
+    channel_index %= channel->n_elem;
 
-    return index;
+    return channel_index;
 }
 
-int channel_push(register Channel* const restrict c,
+int channel_push(register Channel* const restrict channel,
                  register void const* const restrict elem) {
-    if (c == NULL || elem == NULL)
+    if (channel == NULL || elem == NULL)
         return -1;
 
-    pthread_mutex_lock(&c->mtx);
+    pthread_mutex_lock(&channel->mtx);
 
-    while (c->size == c->n_elem)
-        pthread_cond_wait(&c->add, &c->mtx);
+    while (channel->size == channel->n_elem)
+        pthread_cond_wait(&channel->add, &channel->mtx);
 
-    register size_t const elem_index = channel_index(c, c->size);
-    register uint8_t* const elem_ptr = &c->buf[elem_index * c->elem_size];
+    register size_t const elem_index = channel_index(channel, channel->size);
+    register uint8_t* const elem_ptr = &channel->buf[elem_index * channel->elem_size];
 
-    memcpy(elem_ptr, elem, c->elem_size);
+    memcpy(elem_ptr, elem, channel->elem_size);
 
-    ++c->size;
+    ++channel->size;
 
-    pthread_cond_signal(&c->remove);
-    pthread_mutex_unlock(&c->mtx);
+    pthread_cond_signal(&channel->remove);
+    pthread_mutex_unlock(&channel->mtx);
 
     return 0;
 }
 
-int channel_pop(register Channel* const restrict c,
+int channel_pop(register Channel* const restrict channel,
                 register void* const restrict elem) {
-    if (c == NULL || elem == NULL)
+    if (channel == NULL || elem == NULL)
         return -1;
 
-    pthread_mutex_lock(&c->mtx);
+    pthread_mutex_lock(&channel->mtx);
 
-    while (c->size == 0)
-        pthread_cond_wait(&c->remove, &c->mtx);
+    while (channel->size == 0)
+        pthread_cond_wait(&channel->remove, &channel->mtx);
 
-    register void* const elem_ptr = &c->buf[c->start * c->elem_size];
+    register void* const elem_ptr = &channel->buf[channel->start * channel->elem_size];
 
-    memcpy(elem, elem_ptr, c->elem_size);
+    memcpy(elem, elem_ptr, channel->elem_size);
 
-    c->start = channel_index(c, 1);
-    --c->size;
+    channel->start = channel_index(channel, 1);
+    --channel->size;
 
-    pthread_cond_signal(&c->add);
-    pthread_mutex_unlock(&c->mtx);
+    pthread_cond_signal(&channel->add);
+    pthread_mutex_unlock(&channel->mtx);
 
     return 0;
 }
@@ -93,13 +93,13 @@ Channel* channel_new(register size_t const n_elem,
     return c;
 }
 
-void channel_delete(register Channel* const c) {
-    if (c == NULL)
+void channel_delete(register Channel* const channel) {
+    if (channel == NULL)
         return;
 
-    pthread_mutex_destroy(&c->mtx);
-    pthread_cond_destroy(&c->add);
-    pthread_cond_destroy(&c->remove);
+    pthread_mutex_destroy(&channel->mtx);
+    pthread_cond_destroy(&channel->add);
+    pthread_cond_destroy(&channel->remove);
 
-    free(c);
+    free(channel);
 }
