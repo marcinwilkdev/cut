@@ -6,7 +6,7 @@
 
 /* Indicates from which thread comes this log_message or
  * if it is empty. Empty message tells that program has to end. */
-enum log_type { reader, analyzer, printer, empty };
+enum log_type { log_reader, log_analyzer, log_printer, log_empty };
 
 /* Message passed between working threads and Logger thread.
  * It has information about thread which has sent the log 

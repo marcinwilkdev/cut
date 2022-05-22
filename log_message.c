@@ -39,7 +39,7 @@ Log_message* log_message_empty(void) {
         return NULL;
 
     *log_message = (Log_message){
-        .type = empty,
+        .type = log_empty,
     };
 
     return log_message;
@@ -47,7 +47,7 @@ Log_message* log_message_empty(void) {
 
 enum log_type log_message_type(register Log_message const* const log_message) {
     if (log_message == NULL)
-        return empty;
+        return log_empty;
 
     return log_message->type;
 }
@@ -63,7 +63,7 @@ bool log_message_is_empty(register Log_message const* const log_message) {
     if (log_message == NULL)
         return true;
 
-    return log_message->type == empty;
+    return log_message->type == log_empty;
 }
 
 void log_message_delete(register Log_message* const log_message) {

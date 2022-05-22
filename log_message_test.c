@@ -6,7 +6,7 @@
 #include "log_message.h"
 
 void log_message_creation_test(void) {
-    register Log_message* const log_message = log_message_new(reader, strlen("Test") + 1, "Test");
+    register Log_message* const log_message = log_message_new(log_reader, strlen("Test") + 1, "Test");
 
     assert(log_message != NULL);
     assert(!log_message_is_empty(log_message));
@@ -15,7 +15,7 @@ void log_message_creation_test(void) {
     log_message_delete(log_message);
     log_message_delete(NULL);
 
-    assert(log_message_new(empty, 0, NULL) == NULL);
+    assert(log_message_new(log_empty, 0, NULL) == NULL);
 }
 
 void log_message_empty_test(void) {
@@ -27,7 +27,7 @@ void log_message_empty_test(void) {
 
     log_message_delete(log_message);
 
-    assert(log_message_type(NULL) == empty);
+    assert(log_message_type(NULL) == log_empty);
     assert(log_message_text(NULL) == NULL);
     assert(log_message_is_empty(NULL) == true);
 }
