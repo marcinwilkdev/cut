@@ -16,7 +16,7 @@ struct Channel {
     uint8_t buf[];    // memory holding elements
 };
 
-static size_t channel_index(Channel const* const c, size_t pos) {
+inline static size_t channel_index(Channel const* const c, size_t pos) {
     pos %= c->n_elem;
 
     size_t index = c->start + pos;
