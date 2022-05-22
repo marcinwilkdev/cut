@@ -14,6 +14,8 @@ void text_message_creation_test(void) {
 
     text_message_delete(message);
     text_message_delete(NULL);
+
+    assert(text_message_new(0, 0) == NULL);
 }
 
 void text_message_empty_test(void) {
