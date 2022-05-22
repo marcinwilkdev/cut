@@ -29,6 +29,7 @@ $(MAIN)asm: $(SRCS)
 	$(CC) $(CASMFLAGS) $(SRCS)
 
 test: $(MAIN)test
+	valgrind --leak-check=full ./$(TEST)
 
 $(MAIN)test: $(SRCS)
 	$(CC) $(CTESTFLAGS) -o $(TEST) $(TESTSRCS)
