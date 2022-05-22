@@ -16,7 +16,7 @@ Text_message* text_message_new(size_t len, char const text[len]);
 void text_message_delete(Text_message* message);
 
 /* Creates special Text_message of type empty which indicates that
- * the program has to end. */
+ * the program has to end. Returns NULL if couldn't allocate memory for message. */
 Text_message* text_message_empty(void);
 
 /* Checks if Text_message is empty. Returns true if message is NULL. */
