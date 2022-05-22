@@ -4,6 +4,7 @@
 #include "channel_test.h"
 #include "watcher_test.h"
 #include "text_message_test.h"
+#include "log_message_test.h"
 
 int main(void) {
     channel_creation_test();
@@ -15,6 +16,9 @@ int main(void) {
 
     text_message_creation_test();
     text_message_empty_test();
+
+    log_message_creation_test();
+    log_message_empty_test();
 
     puts("All tests passed succesfully.");
 
