@@ -55,7 +55,13 @@ inline static void* watchdog_thread_start(void* const w) {
     return NULL;
 }
 
+static void signal_handler(int const sig) {
+    interrupt = sig;
+}
+
 int main(void) {
+    signal(SIGTERM, signal_handler);
+
     register Channel* const text_channel =
         channel_new(CHANNEL_SIZE, sizeof(Text_message*));
     register Channel* const log_channel =
@@ -96,10 +102,6 @@ int main(void) {
     pthread_create(&threads[2], NULL, printer_thread_start, &printer);
     pthread_create(&threads[3], NULL, logger_thread_start, &logger);
     pthread_create(&threads[4], NULL, watchdog_thread_start, &watchdog);
-
-    nanosleep(&(struct timespec){.tv_sec = 3}, NULL);
-
-    interrupt = SIGTERM;
 
     pthread_join(threads[0], NULL);
     pthread_join(threads[1], NULL);
