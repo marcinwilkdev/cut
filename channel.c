@@ -71,6 +71,19 @@ int channel_pop(register Channel* const restrict channel,
     return 0;
 }
 
+size_t channel_size(register Channel *const channel) {
+    if (channel == NULL)
+        return 0;
+
+    pthread_mutex_lock(&channel->mtx);
+
+    register size_t const size = channel->size;
+
+    pthread_mutex_unlock(&channel->mtx);
+
+    return size;
+}
+
 Channel* channel_new(register size_t const n_elem,
                      register size_t const elem_size) {
     if (n_elem == 0 || elem_size == 0)

@@ -17,6 +17,8 @@ int channel_push(Channel* __restrict c, void const* __restrict elem);
  * blocks calling thread until an element was pushed the channel.
  * Returns -1 if the channel or element is NULL and 0 otherwise. */
 int channel_pop(Channel* __restrict c, void* __restrict elem);
+/* Returns channel's size or 0 if channel is NULL. */
+size_t channel_size(Channel* channel);
 
 /* Creates new channel with n_elem capacity and elem_size
  * size of element in bytes. Returns NULL if memory couldn't be allocated
