@@ -9,6 +9,7 @@
 #include "reader_test.h"
 #include "core_util_message_test.h"
 #include "analyzer_test.h"
+#include "printer_test.h"
 
 int main(void) {
     channel_creation_test();
@@ -34,6 +35,8 @@ int main(void) {
     get_cores_count_works();
 
     analyzer_working_test();
+
+    printer_working_test();
 
     puts("All tests passed succesfully.");
 
