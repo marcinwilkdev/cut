@@ -47,12 +47,14 @@ inline static void* logger_thread_start(void* const l) {
 }
 
 int main(void) {
-    Channel* const text_channel =
+    register Channel* const text_channel =
         channel_new(CHANNEL_SIZE, sizeof(Text_message*));
-    Channel* const log_channel =
+    register Channel* const log_channel =
         channel_new(CHANNEL_SIZE, sizeof(Log_message*));
-    Channel* const core_util_channel =
+    register Channel* const core_util_channel =
         channel_new(CHANNEL_SIZE, sizeof(Core_util_message*));
+
+    Watcher watcher = watcher_new();
 
     register size_t const cores_count = get_cores_count(&interrupt);
 
@@ -60,14 +62,16 @@ int main(void) {
         .text_channel = text_channel,
         .log_channel = log_channel,
         .interrupt = &interrupt,
+        .watcher = &watcher,
     };
 
     register Analyzer* const analyzer = analyzer_new(
-        text_channel, core_util_channel, log_channel, NULL, cores_count);
+        text_channel, core_util_channel, log_channel, &watcher, cores_count);
 
     Printer printer = {
         .core_util_channel = core_util_channel,
         .log_channel = log_channel,
+        .watcher = &watcher,
     };
 
     Logger logger = {
@@ -95,6 +99,8 @@ int main(void) {
     channel_delete(text_channel);
     channel_delete(log_channel);
     channel_delete(core_util_channel);
+
+    watcher_delete(&watcher);
 
     return EXIT_SUCCESS;
 }
