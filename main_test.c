@@ -10,6 +10,7 @@
 #include "core_util_message_test.h"
 #include "analyzer_test.h"
 #include "printer_test.h"
+#include "logger_test.h"
 
 int main(void) {
     channel_creation_test();
@@ -37,6 +38,8 @@ int main(void) {
     analyzer_working_test();
 
     printer_working_test();
+
+    logger_working_test();
 
     puts("All tests passed succesfully.");
 
