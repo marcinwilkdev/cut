@@ -12,7 +12,7 @@
  * Printer worker. */
 typedef struct Analyzer Analyzer;
 
-/* Starts Analyzer which will text_messages from text_channel until
+/* Starts Analyzer which will read text_messages from text_channel until
  * empty message encountered. Every message is analyzed and if contains
  * cpu core information it calculates core utilization and sends it
  * to Reader worker. If empty message comes it sends empty core util

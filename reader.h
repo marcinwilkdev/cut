@@ -10,8 +10,9 @@
 /* This worker is responsible for reading data from /proc/stat file
  * and sending it through channel to Analyzer worker. It's reader_start
  * method should be launched on it's own thread. It also sends logs through
- * log_channel and signals working through watcher. It will send special 
- * message to close channel when signal field signals that program should end. */
+ * log_channel and signals working through watcher. It will send special
+ * message to close channel when signal field signals that program should end.
+ */
 typedef struct Reader Reader;
 
 struct Reader {

@@ -39,14 +39,14 @@ void analyzer_working_test(void) {
 
     register size_t const cores_count = get_cores_count(NULL);
 
-    register Analyzer* const analyzer = analyzer_new(
-        text_channel, core_util_channel, log_channel, NULL, cores_count);
-
     Reader reader = {
         .text_channel = text_channel,
         .log_channel = log_channel,
         .interrupt = &interrupt,
     };
+
+    register Analyzer* const analyzer = analyzer_new(
+        text_channel, core_util_channel, log_channel, NULL, cores_count);
 
     pthread_t threads[2];
 
