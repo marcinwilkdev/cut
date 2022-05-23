@@ -6,6 +6,7 @@
 #include "text_message_test.h"
 #include "log_message_test.h"
 #include "helper_test.h"
+#include "reader_test.h"
 
 int main(void) {
     channel_creation_test();
@@ -22,6 +23,8 @@ int main(void) {
     log_message_empty_test();
 
     open_stat_file_works();
+
+    reader_working_test();
 
     puts("All tests passed succesfully.");
 
