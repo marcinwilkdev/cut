@@ -8,13 +8,7 @@ void watchdog_start(register Watchdog* const watchdog) {
             fprintf(stderr,
                     "Workers not responding. Shutting down program...\n");
 
-            // i think in stagnation program should quit gracefully
-            // but code below could not be working on error
-            *watchdog->interrupt = SIGTERM;
-            break;
-
-            // this is better if we should just forcefully shutdown
-            /* exit(-1); */
+            exit(-1);
         }
     }
 }
