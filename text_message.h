@@ -12,7 +12,8 @@ typedef struct Text_message Text_message;
 /* Creates new Text_message with text in it. Returns NULL if len is equal
  * to 0 or if couldn't malloc memory for message. */
 Text_message* text_message_new(size_t len, char const text[len]);
-/* Safely deletes message and deallocates memory. */
+/* Safely deletes message and deallocates memory. Does nothing if NULL passed
+ * as an argument. */
 void text_message_delete(Text_message* message);
 
 /* Creates special Text_message of type empty which indicates that
