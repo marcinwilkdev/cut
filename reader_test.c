@@ -13,7 +13,7 @@
 static sig_atomic_t volatile interrupt = 0;
 
 inline static void* reader_thread_start(void* const r) {
-    Reader* const reader = r;
+    register Reader* const reader = r;
 
     reader_start(reader);
 
@@ -21,8 +21,8 @@ inline static void* reader_thread_start(void* const r) {
 }
 
 void reader_working_test(void) {
-    Channel* const text_channel = channel_new(BIG_CHANNEL_SIZE, sizeof(Text_message*));
-    Channel* const log_channel = channel_new(BIG_CHANNEL_SIZE, sizeof(Log_message*));
+    register Channel* const text_channel = channel_new(BIG_CHANNEL_SIZE, sizeof(Text_message*));
+    register Channel* const log_channel = channel_new(BIG_CHANNEL_SIZE, sizeof(Log_message*));
 
     Reader reader = {
         .text_channel = text_channel,
@@ -42,19 +42,29 @@ void reader_working_test(void) {
 
     for (;;) {
         Text_message* text_message = NULL;
-        Log_message* log_message = NULL;
 
         channel_pop(text_channel, &text_message);
-        channel_pop(log_channel, &log_message);
 
         if (text_message_is_empty(text_message)) {
             text_message_delete(text_message);
-            log_message_delete(log_message);
 
             break;
         }
 
         text_message_delete(text_message);
+    }
+
+    for (;;) {
+        Log_message* log_message = NULL;
+
+        channel_pop(log_channel, &log_message);
+
+        if (log_message_is_empty(log_message)) {
+            log_message_delete(log_message);
+
+            break;
+        }
+
         log_message_delete(log_message);
     }
 
