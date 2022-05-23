@@ -1,9 +1,9 @@
 #include <string.h>
 #include <assert.h>
 
-#include "text_message_test.h"
+#include "../test_headers/text_message_test.h"
 
-#include "text_message.h"
+#include "../headers/text_message.h"
 
 void text_message_creation_test(void) {
     register Text_message* const message = text_message_new(strlen("Test") + 1, "Test");

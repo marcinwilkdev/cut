@@ -1,14 +1,13 @@
-#include <signal.h>
+#include <assert.h>
 
-#include "logger_test.h"
-#include "reader.h"
-#include "analyzer.h"
-#include "printer.h"
-#include "text_message.h"
-#include "core_util_message.h"
-#include "log_message.h"
-#include "helper.h"
-#include "logger.h"
+#include "../test_headers/analyzer_test.h"
+
+#include "../headers/analyzer.h"
+#include "../headers/core_util_message.h"
+#include "../headers/helper.h"
+#include "../headers/log_message.h"
+#include "../headers/reader.h"
+#include "../headers/text_message.h"
 
 #define BIG_CHANNEL_SIZE 100
 
@@ -30,23 +29,7 @@ inline static void* analyzer_thread_start(void* const a) {
     return NULL;
 }
 
-inline static void* printer_thread_start(void* const p) {
-    register Printer* const printer = p;
-
-    printer_start(printer);
-
-    return NULL;
-}
-
-inline static void* logger_thread_start(void* const l) {
-    register Logger* const logger = l;
-
-    logger_start(logger);
-
-    return NULL;
-}
-
-void logger_working_test(void) {
+void analyzer_working_test(void) {
     Channel* const text_channel =
         channel_new(BIG_CHANNEL_SIZE, sizeof(Text_message*));
     Channel* const log_channel =
@@ -65,21 +48,10 @@ void logger_working_test(void) {
     register Analyzer* const analyzer = analyzer_new(
         text_channel, core_util_channel, log_channel, NULL, cores_count);
 
-    Printer printer = {
-        .core_util_channel = core_util_channel,
-        .log_channel = log_channel,
-    };
-
-    Logger logger = {
-        .log_channel = log_channel,
-    };
-
-    pthread_t threads[4];
+    pthread_t threads[2];
 
     pthread_create(&threads[0], NULL, reader_thread_start, &reader);
     pthread_create(&threads[1], NULL, analyzer_thread_start, analyzer);
-    pthread_create(&threads[2], NULL, printer_thread_start, &printer);
-    pthread_create(&threads[3], NULL, logger_thread_start, &logger);
 
     nanosleep(&(struct timespec){.tv_nsec = 1000000}, NULL);
 
@@ -87,10 +59,38 @@ void logger_working_test(void) {
 
     pthread_join(threads[0], NULL);
     pthread_join(threads[1], NULL);
-    pthread_join(threads[2], NULL);
-    pthread_join(threads[3], NULL);
 
     analyzer_delete(analyzer);
+
+    for (;;) {
+        Core_util_message* core_util_message = NULL;
+
+        channel_pop(core_util_channel, &core_util_message);
+
+        if (core_util_message->empty) {
+            core_util_message_delete(core_util_message);
+
+            break;
+        }
+
+        assert(core_util_message->core_num < cores_count);
+
+        core_util_message_delete(core_util_message);
+    }
+
+    for (;;) {
+        Log_message* log_message = NULL;
+
+        channel_pop(log_channel, &log_message);
+
+        if (log_message_is_empty(log_message)) {
+            log_message_delete(log_message);
+
+            break;
+        }
+
+        log_message_delete(log_message);
+    }
 
     channel_delete(text_channel);
     channel_delete(log_channel);

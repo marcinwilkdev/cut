@@ -1,8 +1,8 @@
 #include <assert.h>
 
-#include "watcher_test.h"
+#include "../test_headers/watcher_test.h"
 
-#include "watcher.h"
+#include "../headers/watcher.h"
 
 void watcher_creation_test(void) {
     Watcher watcher = watcher_new();

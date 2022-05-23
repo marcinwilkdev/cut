@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "core_util_message.h"
-#include "log_message.h"
-#include "printer.h"
+#include "../headers/core_util_message.h"
+#include "../headers/log_message.h"
+#include "../headers/printer.h"
 
 #define BUFF_SIZE 256
 

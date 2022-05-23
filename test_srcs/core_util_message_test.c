@@ -1,8 +1,8 @@
 #include <assert.h>
 
-#include "core_util_message_test.h"
+#include "../test_headers/core_util_message_test.h"
 
-#include "core_util_message.h"
+#include "../headers/core_util_message.h"
 
 void core_util_message_creation_test(void) {
     register Core_util_message* const core_util_message = core_util_message_new(0, 0);

@@ -1,9 +1,9 @@
 #include <string.h>
 #include <assert.h>
 
-#include "log_message_test.h"
+#include "../test_headers/log_message_test.h"
 
-#include "log_message.h"
+#include "../headers/log_message.h"
 
 void log_message_creation_test(void) {
     register Log_message* const log_message = log_message_new(log_reader, strlen("Test") + 1, "Test");

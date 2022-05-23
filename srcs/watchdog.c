@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "watchdog.h"
+#include "../headers/watchdog.h"
 
 void watchdog_start(register Watchdog* const watchdog) {
     while (*watchdog->interrupt == 0) {

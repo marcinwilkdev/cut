@@ -2,11 +2,11 @@
 #include <signal.h>
 #include <stdio.h>
 
-#include "reader_test.h"
+#include "../test_headers/reader_test.h"
 
-#include "reader.h"
-#include "text_message.h"
-#include "log_message.h"
+#include "../headers/reader.h"
+#include "../headers/text_message.h"
+#include "../headers/log_message.h"
 
 #define BIG_CHANNEL_SIZE 100
 

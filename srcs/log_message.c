@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "log_message.h"
+#include "../headers/log_message.h"
 
 struct Log_message {
     enum log_type type;

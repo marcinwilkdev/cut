@@ -1,8 +1,8 @@
 #include <assert.h>
 
-#include "helper_test.h"
+#include "../test_headers/helper_test.h"
 
-#include "helper.h"
+#include "../headers/helper.h"
 
 void open_stat_file_works(void) {
     FILE* const stat_file = open_stat_file(NULL);

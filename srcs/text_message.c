@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "text_message.h"
+#include "../headers/text_message.h"
 
 struct Text_message {
     bool empty;

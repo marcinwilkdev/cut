@@ -1,16 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "channel_test.h"
-#include "watcher_test.h"
-#include "text_message_test.h"
-#include "log_message_test.h"
-#include "helper_test.h"
-#include "reader_test.h"
-#include "core_util_message_test.h"
-#include "analyzer_test.h"
-#include "printer_test.h"
-#include "logger_test.h"
+#include "../test_headers/channel_test.h"
+#include "../test_headers/watcher_test.h"
+#include "../test_headers/text_message_test.h"
+#include "../test_headers/log_message_test.h"
+#include "../test_headers/helper_test.h"
+#include "../test_headers/reader_test.h"
+#include "../test_headers/core_util_message_test.h"
+#include "../test_headers/analyzer_test.h"
+#include "../test_headers/printer_test.h"
+#include "../test_headers/logger_test.h"
 
 int main(void) {
     channel_creation_test();

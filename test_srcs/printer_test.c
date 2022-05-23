@@ -1,13 +1,13 @@
-#include <assert.h>
+#include <signal.h>
 
-#include "analyzer_test.h"
-
-#include "analyzer.h"
-#include "core_util_message.h"
-#include "helper.h"
-#include "log_message.h"
-#include "reader.h"
-#include "text_message.h"
+#include "../test_headers/printer_test.h"
+#include "../headers/reader.h"
+#include "../headers/analyzer.h"
+#include "../headers/printer.h"
+#include "../headers/text_message.h"
+#include "../headers/core_util_message.h"
+#include "../headers/log_message.h"
+#include "../headers/helper.h"
 
 #define BIG_CHANNEL_SIZE 100
 
@@ -29,7 +29,15 @@ inline static void* analyzer_thread_start(void* const a) {
     return NULL;
 }
 
-void analyzer_working_test(void) {
+inline static void* printer_thread_start(void* const p) {
+    register Printer* const printer = p;
+
+    printer_start(printer);
+
+    return NULL;
+}
+
+void printer_working_test(void) {
     Channel* const text_channel =
         channel_new(BIG_CHANNEL_SIZE, sizeof(Text_message*));
     Channel* const log_channel =
@@ -48,10 +56,16 @@ void analyzer_working_test(void) {
     register Analyzer* const analyzer = analyzer_new(
         text_channel, core_util_channel, log_channel, NULL, cores_count);
 
-    pthread_t threads[2];
+    Printer printer = {
+        .core_util_channel = core_util_channel,
+        .log_channel = log_channel,
+    };
+
+    pthread_t threads[3];
 
     pthread_create(&threads[0], NULL, reader_thread_start, &reader);
     pthread_create(&threads[1], NULL, analyzer_thread_start, analyzer);
+    pthread_create(&threads[2], NULL, printer_thread_start, &printer);
 
     nanosleep(&(struct timespec){.tv_nsec = 1000000}, NULL);
 
@@ -59,24 +73,9 @@ void analyzer_working_test(void) {
 
     pthread_join(threads[0], NULL);
     pthread_join(threads[1], NULL);
+    pthread_join(threads[2], NULL);
 
     analyzer_delete(analyzer);
-
-    for (;;) {
-        Core_util_message* core_util_message = NULL;
-
-        channel_pop(core_util_channel, &core_util_message);
-
-        if (core_util_message->empty) {
-            core_util_message_delete(core_util_message);
-
-            break;
-        }
-
-        assert(core_util_message->core_num < cores_count);
-
-        core_util_message_delete(core_util_message);
-    }
 
     for (;;) {
         Log_message* log_message = NULL;

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "helper.h"
+#include "../headers/helper.h"
 
 #define BUFF_SIZE 256
 

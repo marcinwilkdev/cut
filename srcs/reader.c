@@ -2,10 +2,10 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "helper.h"
-#include "log_message.h"
-#include "reader.h"
-#include "text_message.h"
+#include "../headers/helper.h"
+#include "../headers/log_message.h"
+#include "../headers/reader.h"
+#include "../headers/text_message.h"
 
 #define BUFF_SIZE 256
 #define ONE_SECOND 1

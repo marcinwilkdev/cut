@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "logger.h"
-#include "log_message.h"
+#include "../headers/logger.h"
+#include "../headers/log_message.h"
 
 #define LOG_FILE_PATH "log_file"
 

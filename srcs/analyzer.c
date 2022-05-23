@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "analyzer.h"
-#include "core_util_message.h"
-#include "log_message.h"
-#include "text_message.h"
+#include "../headers/analyzer.h"
+#include "../headers/core_util_message.h"
+#include "../headers/log_message.h"
+#include "../headers/text_message.h"
 
 #define BUFF_SIZE 256
 

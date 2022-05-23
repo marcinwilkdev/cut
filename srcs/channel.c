@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "channel.h"
+#include "../headers/channel.h"
 
 struct Channel {
     pthread_mutex_t mtx;   // guards channel's memory

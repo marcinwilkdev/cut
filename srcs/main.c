@@ -1,16 +1,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "analyzer.h"
-#include "core_util_message.h"
-#include "helper.h"
-#include "log_message.h"
-#include "logger.h"
-#include "printer.h"
-#include "printer_test.h"
-#include "reader.h"
-#include "text_message.h"
-#include "watchdog.h"
+#include "../headers/analyzer.h"
+#include "../headers/core_util_message.h"
+#include "../headers/helper.h"
+#include "../headers/log_message.h"
+#include "../headers/logger.h"
+#include "../headers/printer.h"
+#include "../headers/reader.h"
+#include "../headers/text_message.h"
+#include "../headers/watchdog.h"
 
 #define CHANNEL_SIZE 1000
 

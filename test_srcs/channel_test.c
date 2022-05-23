@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <pthread.h>
 
-#include "channel_test.h"
+#include "../test_headers/channel_test.h"
 
 void channel_creation_test(void) {
     register Channel* const channel = channel_new(1, 1);
