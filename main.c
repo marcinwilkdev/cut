@@ -9,6 +9,7 @@
 #include "reader.h"
 #include "text_message.h"
 #include "logger.h"
+#include "watchdog.h"
 
 #define CHANNEL_SIZE 1000
 
@@ -46,6 +47,14 @@ inline static void* logger_thread_start(void* const l) {
     return NULL;
 }
 
+inline static void* watchdog_thread_start(void* const w) {
+    register Watchdog* const watchdog = w;
+
+    watchdog_start(watchdog);
+
+    return NULL;
+}
+
 int main(void) {
     register Channel* const text_channel =
         channel_new(CHANNEL_SIZE, sizeof(Text_message*));
@@ -78,12 +87,15 @@ int main(void) {
         .log_channel = log_channel,
     };
 
-    pthread_t threads[4];
+    Watchdog watchdog = watchdog_new(&watcher, &interrupt);
+
+    pthread_t threads[5];
 
     pthread_create(&threads[0], NULL, reader_thread_start, &reader);
     pthread_create(&threads[1], NULL, analyzer_thread_start, analyzer);
     pthread_create(&threads[2], NULL, printer_thread_start, &printer);
     pthread_create(&threads[3], NULL, logger_thread_start, &logger);
+    pthread_create(&threads[4], NULL, watchdog_thread_start, &watchdog);
 
     nanosleep(&(struct timespec){.tv_sec = 3}, NULL);
 
@@ -93,6 +105,7 @@ int main(void) {
     pthread_join(threads[1], NULL);
     pthread_join(threads[2], NULL);
     pthread_join(threads[3], NULL);
+    pthread_join(threads[4], NULL);
 
     analyzer_delete(analyzer);
 
