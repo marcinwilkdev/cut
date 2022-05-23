@@ -2,9 +2,10 @@
 #define HELPER_H
 
 #include <stdio.h>
+#include <signal.h>
 
-/* Returns opened /proc/stat file or ends program with error
- * if couldn't open. */
-FILE* open_stat_file(void); // proably should also set signal var?
+/* Returns opened /proc/stat file or sets interrupt signal
+ * and returns NULL if couldn't open. */
+FILE* open_stat_file(sig_atomic_t volatile* interrupt);
 
 #endif

@@ -5,7 +5,7 @@
 #include "helper.h"
 
 void open_stat_file_works(void) {
-    FILE* const stat_file = open_stat_file();
+    FILE* const stat_file = open_stat_file(NULL);
 
     assert(stat_file != NULL);
 

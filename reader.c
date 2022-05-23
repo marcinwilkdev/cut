@@ -42,7 +42,10 @@ inline static void reader_send_message(register Reader* const reader,
 }
 
 inline static void reader_send_stat_file(register Reader* const reader) {
-    register FILE* const stat = open_stat_file();
+    register FILE* const stat = open_stat_file(reader->interrupt);
+
+    if (stat == NULL)
+        return;
 
     char buff[BUFF_SIZE];
 

@@ -2,12 +2,16 @@
 
 #include "helper.h"
 
-FILE* open_stat_file(void) {
+FILE* open_stat_file(register sig_atomic_t volatile* const interrupt) {
     register FILE* const stat_file = fopen("/proc/stat", "r");
 
     if (stat_file == NULL) {
-        perror("Couldn't open /proc/stat file.");
-        exit(-1);
+        fprintf(stderr,
+                "Couldn't open /proc/stat file. Shutting down program...");
+
+        *interrupt = SIGTERM;
+
+        return NULL;
     }
 
     return stat_file;
