@@ -8,6 +8,7 @@
 #include "helper_test.h"
 #include "reader_test.h"
 #include "core_util_message_test.h"
+#include "analyzer_test.h"
 
 int main(void) {
     channel_creation_test();
@@ -29,6 +30,10 @@ int main(void) {
 
     core_util_message_creation_test();
     core_util_message_empty_test();
+
+    get_cores_count_works();
+
+    analyzer_working_test();
 
     puts("All tests passed succesfully.");
 
