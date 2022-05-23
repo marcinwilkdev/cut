@@ -69,9 +69,27 @@ int main(void) {
     register Channel* const core_util_channel =
         channel_new(CHANNEL_SIZE, sizeof(Core_util_message*));
 
+    if (text_channel == NULL || log_channel == NULL || core_util_channel == NULL) {
+        channel_delete(text_channel);
+        channel_delete(log_channel);
+        channel_delete(core_util_channel);
+
+        fprintf(stderr, "Can't allocate memory, shutting down program...");
+        exit(-1);
+    }
+
     Watcher watcher = watcher_new();
 
     register size_t const cores_count = get_cores_count(&interrupt);
+
+    if (cores_count == 0) {
+        channel_delete(text_channel);
+        channel_delete(log_channel);
+        channel_delete(core_util_channel);
+
+        fprintf(stderr, "Can't read cores count from /proc/stat. Shutting down program...");
+        exit(-1);
+    }
 
     Reader reader = {
         .text_channel = text_channel,
@@ -82,6 +100,15 @@ int main(void) {
 
     register Analyzer* const analyzer = analyzer_new(
         text_channel, core_util_channel, log_channel, &watcher, cores_count);
+
+    if (analyzer == NULL) {
+        channel_delete(text_channel);
+        channel_delete(log_channel);
+        channel_delete(core_util_channel);
+
+        fprintf(stderr, "Can't allocate memory, shutting down program...");
+        exit(-1);
+    }
 
     Printer printer = {
         .core_util_channel = core_util_channel,
