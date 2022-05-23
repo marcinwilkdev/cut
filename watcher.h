@@ -14,6 +14,7 @@ typedef struct Watcher Watcher;
 
 struct Watcher {
     pthread_mutex_t mtx;
+    pthread_cond_t cond;
     bool flag;
     char padd[7];
 };

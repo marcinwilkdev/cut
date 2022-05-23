@@ -12,13 +12,10 @@
 typedef struct Watchdog Watchdog;
 
 struct Watchdog {
-    size_t milis;
     Watcher* watcher;
     sig_atomic_t volatile* interrupt;
 };
 
-/* Creates new instance of Watchdog. */
-Watchdog watchdog_new(Watcher* watcher, sig_atomic_t volatile* interrupt);
 /* Starts Watchdog which checks every milisecond watcher for signal
  * from workers. If it doesn't get signal in 2 seconds it shuts down
  * the program. */

@@ -2,9 +2,9 @@
 #include <string.h>
 
 #include "analyzer.h"
+#include "core_util_message.h"
 #include "log_message.h"
 #include "text_message.h"
-#include "core_util_message.h"
 
 #define BUFF_SIZE 256
 
@@ -100,7 +100,8 @@ static void analyzer_parse_line(register Analyzer* const analyzer,
 
         register size_t const percentage = 100 * (totald - idled) / totald;
 
-        Core_util_message* const core_util_message = core_util_message_new(core_num, percentage);
+        Core_util_message* const core_util_message =
+            core_util_message_new(core_num, percentage);
 
         analyzer_log_core(analyzer, core_num);
 
@@ -121,7 +122,9 @@ void analyzer_start(register Analyzer* const analyzer) {
         if (text_message_is_empty(line)) {
             text_message_delete(line);
 
-            Core_util_message* const core_util_message = core_util_message_empty();
+            Core_util_message* const core_util_message =
+                core_util_message_empty();
+
             channel_push(analyzer->core_util_channel, &core_util_message);
 
             break;
@@ -130,6 +133,8 @@ void analyzer_start(register Analyzer* const analyzer) {
         analyzer_parse_line(analyzer, text_message_message(line));
         text_message_delete(line);
     }
+
+    watcher_notify(analyzer->watcher);
 }
 
 Analyzer* analyzer_new(register Channel* const text_channel,

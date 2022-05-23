@@ -69,4 +69,6 @@ void reader_start(register Reader* const reader) {
 
     Log_message* const log = log_message_empty();
     channel_push(reader->log_channel, &log);
+
+    watcher_notify(reader->watcher);
 }

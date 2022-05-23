@@ -1,14 +1,15 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "analyzer.h"
 #include "core_util_message.h"
 #include "helper.h"
 #include "log_message.h"
+#include "logger.h"
 #include "printer.h"
 #include "printer_test.h"
 #include "reader.h"
 #include "text_message.h"
-#include "logger.h"
 #include "watchdog.h"
 
 #define CHANNEL_SIZE 1000
@@ -55,8 +56,10 @@ inline static void* watchdog_thread_start(void* const w) {
     return NULL;
 }
 
-static void signal_handler(int const sig) {
-    interrupt = sig;
+static void signal_handler(register int const sig) {
+    if (sig == SIGTERM) {
+        interrupt = sig;
+    }
 }
 
 int main(void) {
@@ -69,7 +72,8 @@ int main(void) {
     register Channel* const core_util_channel =
         channel_new(CHANNEL_SIZE, sizeof(Core_util_message*));
 
-    if (text_channel == NULL || log_channel == NULL || core_util_channel == NULL) {
+    if (text_channel == NULL || log_channel == NULL ||
+        core_util_channel == NULL) {
         channel_delete(text_channel);
         channel_delete(log_channel);
         channel_delete(core_util_channel);
@@ -87,7 +91,9 @@ int main(void) {
         channel_delete(log_channel);
         channel_delete(core_util_channel);
 
-        fprintf(stderr, "Can't read cores count from /proc/stat. Shutting down program...");
+        fprintf(
+            stderr,
+            "Can't read cores count from /proc/stat. Shutting down program...");
         exit(-1);
     }
 
@@ -120,7 +126,10 @@ int main(void) {
         .log_channel = log_channel,
     };
 
-    Watchdog watchdog = watchdog_new(&watcher, &interrupt);
+    Watchdog watchdog = {
+        .watcher = &watcher,
+        .interrupt = &interrupt,
+    };
 
     pthread_t threads[5];
 

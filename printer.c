@@ -46,4 +46,6 @@ void printer_start(register Printer* const printer) {
 
         core_util_message_delete(core_util_message);
     }
+
+    watcher_notify(printer->watcher);
 }
