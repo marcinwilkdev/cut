@@ -2,7 +2,7 @@
 Simple cpu usage tracker written in C for linux platforms.
 
 ## Setup
-You need clang and cmake (at lest 3.14) to build and run this program.
+You need clang and cmake (at least 3.14) to build and run this program.
 You can find clang under this link: https://clang.llvm.org/
 and cmake under this link: https://cmake.org/
 
